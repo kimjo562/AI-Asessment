@@ -131,7 +131,45 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="ABDecision.cpp" />
+    <ClCompile Include="Agent.cpp" />
+    <ClCompile Include="AStar.cpp" />
+    <ClCompile Include="BehaviourDecision.cpp" />
+    <ClCompile Include="DecisionTreeBehaviour.cpp" />
+    <ClCompile Include="EvadeBehaviour.cpp" />
+    <ClCompile Include="FiniteStateMachine.cpp" />
+    <ClCompile Include="IdleState.cpp" />
+    <ClCompile Include="KeyboardBehaviour.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="PredAtkState.cpp" />
+    <ClCompile Include="PursueBehaviour.cpp" />
+    <ClCompile Include="ScreenBehaviour.cpp" />
+    <ClCompile Include="SeekBehaviour.cpp" />
+    <ClCompile Include="State.cpp" />
+    <ClCompile Include="WanderBehaviour.cpp" />
+    <ClCompile Include="WithinRangeCondition.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="ABDecision.h" />
+    <ClInclude Include="Agent.h" />
+    <ClInclude Include="AStar.h" />
+    <ClInclude Include="Behaviour.h" />
+    <ClInclude Include="BehaviourDecision.h" />
+    <ClInclude Include="Condition.h" />
+    <ClInclude Include="Decision.h" />
+    <ClInclude Include="DecisionTreeBehaviour.h" />
+    <ClInclude Include="EvadeBehaviour.h" />
+    <ClInclude Include="FiniteStateMachine.h" />
+    <ClInclude Include="IdleState.h" />
+    <ClInclude Include="KeyboardBehaviour.h" />
+    <ClInclude Include="PredAtkState.h" />
+    <ClInclude Include="PursueBehaviour.h" />
+    <ClInclude Include="ScreenBehaviour.h" />
+    <ClInclude Include="SeekBehaviour.h" />
+    <ClInclude Include="State.h" />
+    <ClInclude Include="Transition.h" />
+    <ClInclude Include="WanderBehaviour.h" />
+    <ClInclude Include="WithinRangeCondition.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

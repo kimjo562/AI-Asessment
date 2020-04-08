@@ -68,6 +68,7 @@
 *
 **********************************************************************************************/
 
+#include <cmath>
 #ifndef RAYLIB_H
 #define RAYLIB_H
 
@@ -330,10 +331,49 @@
 #endif
 
 // Vector2 type
-typedef struct Vector2 {
-    float x;
-    float y;
-} Vector2;
+// Vector2 type
+		typedef struct Vector2 {
+			float x;
+			float y;
+
+			Vector2 operator +(Vector2 rhs)
+			{
+				return Vector2{ x + rhs.x, y + rhs.y };
+			}
+
+			Vector2 operator -(Vector2 rhs)
+			{
+				return Vector2{ x - rhs.x, y - rhs.y };
+			}
+
+			void operator +=(Vector2 rhs)
+			{
+				x += rhs.x;
+				y += rhs.y;
+			}
+
+			Vector2 operator *(float rhs)
+			{
+				return Vector2{ x * rhs, y * rhs };
+			}
+
+			// Magnitude is the vector length
+			float magnitude()
+			{
+				return sqrt((x * x) + (y * y));
+			}
+
+			Vector2 normalize()
+			{
+				if (magnitude() != 0)
+				{
+					return Vector2{ x / magnitude(), y / magnitude() };
+				}
+
+				return Vector2{ x, y };
+			}
+
+		} Vector2;
 
 // Vector3 type
 typedef struct Vector3 {

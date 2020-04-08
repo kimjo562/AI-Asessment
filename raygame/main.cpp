@@ -10,17 +10,91 @@
 ********************************************************************************************/
 
 #include "raylib.h"
+#include "Agent.h"
+#include "KeyboardBehaviour.h"
+#include "ScreenBehaviour.h"
+#include "WanderBehaviour.h"
+#include "SeekBehaviour.h"
+#include "PursueBehaviour.h"
+#include "EvadeBehaviour.h"
+#include "FiniteStateMachine.h"
+#include "IdleState.h"
+#include "PredAtkState.h"
+#include "WithinRangeCondition.h"
+#include "DecisionTreeBehaviour.h"
+#include "ABDecision.h"
+#include "BehaviourDecision.h"
 
 int main()
 {
 	// Initialization
 	//--------------------------------------------------------------------------------------
-	int screenWidth = 800;
-	int screenHeight = 450;
+	int screenWidth = 1600;
+	int screenHeight = 900;
 
 	InitWindow(screenWidth, screenHeight, "raylib [core] example - basic window");
 
 	SetTargetFPS(60);
+
+	// Create the player
+	Agent* player = new Agent();
+	player->setPosition(Vector2{ 200.0f, 200.0f });
+	player->setSpeed(100.0f);
+	player->setColor(WHITE);
+	// Create and add the keyboard Behaviour
+	KeyboardBehaviour* keyboardBehaviour = new KeyboardBehaviour();
+	player->addBehaviour(keyboardBehaviour);
+	//Create and add screen edge behavior
+	ScreenBehaviour* screenBehaviour = new ScreenBehaviour();
+	player->addBehaviour(screenBehaviour);
+
+	// Create the enemy
+	Agent* enemy = new Agent();
+	enemy->setPosition(Vector2{ 700.0f, 700.0f });
+	enemy->setSpeed(45.0f);
+	enemy->setColor(LIME);
+
+	// Create the enemy's FSM
+	FSM* enemyFSM = new FSM();
+	//	enemy->addBehaviour(enemyFSM);
+	enemy->addBehaviour(screenBehaviour);
+	// Create and add the idle state
+	IdleState* idleState = new IdleState();
+	enemyFSM->addState(idleState);
+	// Create and add the attack state
+	PredAtkState* attackState = new PredAtkState(player, 100.0f);		// (Target, Speed)
+	enemyFSM->addState(attackState);
+
+	// Create and add the condition
+	Condition* withinRangeCondition = new WithinRangeCondition(player, 100);		// (Target, Range Detection)
+	enemyFSM->addCondition(withinRangeCondition);
+	// Create and add the Transition
+	Transition* toAttackTransition = new Transition(attackState, withinRangeCondition);
+	enemyFSM->addTransition(toAttackTransition);
+	idleState->addTransition(toAttackTransition);
+	// Set current state to idle
+	enemyFSM->setCurrentState(idleState);
+
+	// Leaves
+	WanderBehaviour* wanderBehaviour = new WanderBehaviour();
+	BehaviourDecision* wanderDecision = new BehaviourDecision(wanderBehaviour);
+	SeekBehaviour* seekBehaviour = new SeekBehaviour();
+	seekBehaviour->setTarget(player);
+	BehaviourDecision* seekDecision = new BehaviourDecision(seekBehaviour);
+	PursueBehaviour* pursueBehaviour = new PursueBehaviour();
+	pursueBehaviour->setTarget(player);
+	BehaviourDecision* pursueDecision = new BehaviourDecision(pursueBehaviour);
+	// Branches
+	WithinRangeCondition* canSeeCondition = new WithinRangeCondition(player, 100);
+	ABDecision* canSeeDecision = new ABDecision(pursueDecision, seekDecision, canSeeCondition);
+	WithinRangeCondition* canHearCondition = new WithinRangeCondition(player, 250);
+	ABDecision* canHearDecision = new ABDecision(canSeeDecision, wanderDecision, canHearCondition);
+
+	// Enemy decision tree
+	DecisionTreeBehaviour* enemyDecisionTree = new DecisionTreeBehaviour(canHearDecision);
+	enemy->addBehaviour(enemyDecisionTree);
+	enemy->addBehaviour(screenBehaviour);
+
 	//--------------------------------------------------------------------------------------
 
 	// Main game loop
@@ -28,16 +102,20 @@ int main()
 	{
 		// Update
 		//----------------------------------------------------------------------------------
-		// TODO: Update your variables here
+		float deltaTime = GetFrameTime();
+		player->update(deltaTime);
+		enemy->update(deltaTime);
+
 		//----------------------------------------------------------------------------------
 
 		// Draw
 		//----------------------------------------------------------------------------------
 		BeginDrawing();
 
-		ClearBackground(RAYWHITE);
+		ClearBackground(BLACK);
 
-		DrawText("Congrats! You created your first window!", 190, 200, 20, LIGHTGRAY);
+		player->draw();
+		enemy->draw();
 
 		EndDrawing();
 		//----------------------------------------------------------------------------------
