@@ -138,14 +138,17 @@
     <ClCompile Include="DecisionTreeBehaviour.cpp" />
     <ClCompile Include="EvadeBehaviour.cpp" />
     <ClCompile Include="FiniteStateMachine.cpp" />
+    <ClCompile Include="HungerState.cpp" />
     <ClCompile Include="IdleState.cpp" />
     <ClCompile Include="KeyboardBehaviour.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="PredAtkState.cpp" />
+    <ClCompile Include="PreyEvadeState.cpp" />
     <ClCompile Include="PursueBehaviour.cpp" />
     <ClCompile Include="ScreenBehaviour.cpp" />
     <ClCompile Include="SeekBehaviour.cpp" />
     <ClCompile Include="State.cpp" />
+    <ClCompile Include="ThirstState.cpp" />
     <ClCompile Include="WanderBehaviour.cpp" />
     <ClCompile Include="WithinRangeCondition.cpp" />
   </ItemGroup>
@@ -160,13 +163,16 @@
     <ClInclude Include="DecisionTreeBehaviour.h" />
     <ClInclude Include="EvadeBehaviour.h" />
     <ClInclude Include="FiniteStateMachine.h" />
+    <ClInclude Include="HungerState.h" />
     <ClInclude Include="IdleState.h" />
     <ClInclude Include="KeyboardBehaviour.h" />
     <ClInclude Include="PredAtkState.h" />
+    <ClInclude Include="PreyEvadeState.h" />
     <ClInclude Include="PursueBehaviour.h" />
     <ClInclude Include="ScreenBehaviour.h" />
     <ClInclude Include="SeekBehaviour.h" />
     <ClInclude Include="State.h" />
+    <ClInclude Include="ThirstState.h" />
     <ClInclude Include="Transition.h" />
     <ClInclude Include="WanderBehaviour.h" />
     <ClInclude Include="WithinRangeCondition.h" />

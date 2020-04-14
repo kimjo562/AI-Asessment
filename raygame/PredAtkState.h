@@ -5,8 +5,7 @@
 class PredAtkState : public State
 {
 public:
-	PredAtkState(Agent* target, float speed)
-		: m_target(target), m_speed(speed) {}
+	PredAtkState(Agent* target, float speed) : m_target(target), m_speed(speed) {}
 	virtual ~PredAtkState() {}
 
 	virtual void update(Agent* agent, float deltaTime);

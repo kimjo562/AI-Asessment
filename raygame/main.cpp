@@ -20,6 +20,9 @@
 #include "FiniteStateMachine.h"
 #include "IdleState.h"
 #include "PredAtkState.h"
+#include "preyEvadeState.h"
+#include "hungerState.h"
+#include "thirstState.h"
 #include "WithinRangeCondition.h"
 #include "DecisionTreeBehaviour.h"
 #include "ABDecision.h"
@@ -41,12 +44,6 @@ int main()
 	player->setPosition(Vector2{ 200.0f, 200.0f });
 	player->setSpeed(100.0f);
 	player->setColor(WHITE);
-	// Create and add the keyboard Behaviour
-	KeyboardBehaviour* keyboardBehaviour = new KeyboardBehaviour();
-	player->addBehaviour(keyboardBehaviour);
-	//Create and add screen edge behavior
-	ScreenBehaviour* screenBehaviour = new ScreenBehaviour();
-	player->addBehaviour(screenBehaviour);
 
 	// Create the enemy
 	Agent* enemy = new Agent();
@@ -54,28 +51,74 @@ int main()
 	enemy->setSpeed(45.0f);
 	enemy->setColor(LIME);
 
+	// Create the enemy
+	Agent* foodSource = new Agent();
+	enemy->setPosition(Vector2{ 300.0f, 100.0f });
+	enemy->setSpeed(45.0f);
+	enemy->setColor(DARKGREEN);
+
+	// Create the enemy
+	Agent* waterSource = new Agent();
+	enemy->setPosition(Vector2{ 500.0f, 700.0f });
+	enemy->setSpeed(45.0f);
+	enemy->setColor(SKYBLUE);
+
+	//Create and add screen edge behavior
+	ScreenBehaviour* screenBehaviour = new ScreenBehaviour();
+	player->addBehaviour(screenBehaviour);
+	enemy->addBehaviour(screenBehaviour);
+
+	// Create the player's FSM
+	FSM* playerFSM = new FSM();
+	player->addBehaviour(playerFSM);
+
 	// Create the enemy's FSM
 	FSM* enemyFSM = new FSM();
-	//	enemy->addBehaviour(enemyFSM);
-	enemy->addBehaviour(screenBehaviour);
-	// Create and add the idle state
+	enemy->addBehaviour(enemyFSM);
+
 	IdleState* idleState = new IdleState();
+	playerFSM->addState(idleState);
 	enemyFSM->addState(idleState);
+
+	// Create and add the Evade state
+	PreyEvadeState* evadeState = new PreyEvadeState(enemy, 150.0f);	
+	playerFSM->addState(evadeState);
+	// Create and add the Hunger state
+	HungerState* hungerState = new HungerState(foodSource, 100.0f);		
+	playerFSM->addState(hungerState);
+	// Create and add the Thirst state
+	ThirstState* thirstState = new ThirstState(waterSource, 100.0f);	
+	playerFSM->addState(thirstState);
+
 	// Create and add the attack state
 	PredAtkState* attackState = new PredAtkState(player, 100.0f);		// (Target, Speed)
 	enemyFSM->addState(attackState);
 
-	// Create and add the condition
-	Condition* withinRangeCondition = new WithinRangeCondition(player, 100);		// (Target, Range Detection)
-	enemyFSM->addCondition(withinRangeCondition);
-	// Create and add the Transition
-	Transition* toAttackTransition = new Transition(attackState, withinRangeCondition);
+	// Create and add the condition for enemy
+	Condition* withinEnemyRangeCond = new WithinRangeCondition(player, 100);		// (Target, Range Detection)
+	enemyFSM->addCondition(withinEnemyRangeCond);
+	// Create and add the Transition for enemy
+	Transition* toAttackTransition = new Transition(attackState, withinEnemyRangeCond);
 	enemyFSM->addTransition(toAttackTransition);
 	idleState->addTransition(toAttackTransition);
+
+	// Create and add the condition for player
+	Condition* withinPlayerRangeCond = new WithinRangeCondition(enemy, 100);		// (Target, Range Detection)
+	playerFSM->addCondition(withinPlayerRangeCond);
+	// Create and add the Transition for player
+	Transition* toEvadeTransition = new Transition(evadeState, withinPlayerRangeCond);
+	playerFSM->addTransition(toEvadeTransition);
+	attackState->addTransition(toEvadeTransition);
+
 	// Set current state to idle
+	playerFSM->setCurrentState(idleState);
 	enemyFSM->setCurrentState(idleState);
 
 	// Leaves
+	EvadeBehaviour* evadeBehaviour = new EvadeBehaviour();
+	evadeBehaviour->setTarget(enemy);
+	BehaviourDecision* evadeDecision = new BehaviourDecision(evadeBehaviour);
+
 	WanderBehaviour* wanderBehaviour = new WanderBehaviour();
 	BehaviourDecision* wanderDecision = new BehaviourDecision(wanderBehaviour);
 	SeekBehaviour* seekBehaviour = new SeekBehaviour();
@@ -84,16 +127,22 @@ int main()
 	PursueBehaviour* pursueBehaviour = new PursueBehaviour();
 	pursueBehaviour->setTarget(player);
 	BehaviourDecision* pursueDecision = new BehaviourDecision(pursueBehaviour);
+
 	// Branches
 	WithinRangeCondition* canSeeCondition = new WithinRangeCondition(player, 100);
 	ABDecision* canSeeDecision = new ABDecision(pursueDecision, seekDecision, canSeeCondition);
 	WithinRangeCondition* canHearCondition = new WithinRangeCondition(player, 250);
 	ABDecision* canHearDecision = new ABDecision(canSeeDecision, wanderDecision, canHearCondition);
+	
+	// Animal decision tree
+	DecisionTreeBehaviour* playerDecisionTree = new DecisionTreeBehaviour(canHearDecision);
+	player->addBehaviour(playerDecisionTree);
+	player->addBehaviour(screenBehaviour);
 
-	// Enemy decision tree
 	DecisionTreeBehaviour* enemyDecisionTree = new DecisionTreeBehaviour(canHearDecision);
 	enemy->addBehaviour(enemyDecisionTree);
 	enemy->addBehaviour(screenBehaviour);
+
 
 	//--------------------------------------------------------------------------------------
 
@@ -105,6 +154,8 @@ int main()
 		float deltaTime = GetFrameTime();
 		player->update(deltaTime);
 		enemy->update(deltaTime);
+		foodSource->update(deltaTime);
+		waterSource->update(deltaTime);
 
 		//----------------------------------------------------------------------------------
 
@@ -116,6 +167,8 @@ int main()
 
 		player->draw();
 		enemy->draw();
+		foodSource->draw();
+		waterSource->draw();
 
 		EndDrawing();
 		//----------------------------------------------------------------------------------
