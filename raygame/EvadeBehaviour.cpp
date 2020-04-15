@@ -24,4 +24,7 @@ void EvadeBehaviour::update(Agent * agent, float deltaTime)
 
 	//return the force
 	agent->addForce(force * deltaTime);
+
+	//Change color
+	agent->setColor(ORANGE);
 }

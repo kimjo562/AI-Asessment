@@ -16,9 +16,9 @@ void PredAtkState::update(Agent* agent, float deltaTime)
 	Vector2 direction = targetPos - pos;
 	direction = direction.normalize();
 	//Multiply the direction by the speed we want the agent to move
-	Vector2 force = direction * m_speed;
+	direction = direction * agent->getSpeed();
 	//Subtract the agent's current velocity from the result to get the force we need to apply
-	force = force - agent->getVelocity();
+	Vector2 force = direction - agent->getVelocity();
 
 	//Apply the force
 	agent->addForce(force * deltaTime);
