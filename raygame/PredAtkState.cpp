@@ -3,7 +3,8 @@
 void PredAtkState::update(Agent* agent, float deltaTime)
 {
 	//Stop the target is null
-	if (agent == nullptr || m_target == nullptr) {
+	if (agent == nullptr || m_target == nullptr) 
+	{
 		return;
 	}
 

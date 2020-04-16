@@ -8,11 +8,11 @@ void ScreenBehaviour::update(Agent * agent, float deltaTime)
 	Vector2 force = { 0, 0 };
 
 	//If out of bounds
-	if (x < 25 || x >= 1585 || y < 50 || y >= 860) {
+	if (x < 50 || x >= 1580 || y < 60 || y >= 840) {
 		//Get this agent's position
 		Vector2 pos = agent->getPosition();
 		//Target the center
-		Vector2 targetPos = { 800, 445 };
+		Vector2 targetPos = { 800, 450 };
 
 		//Calculate the vector describing the direction to the target and normalize it
 		Vector2 direction = targetPos - pos;

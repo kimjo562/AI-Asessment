@@ -99,6 +99,12 @@
     <ClCompile Include="ThirstState.cpp">
       <Filter>Source Files\States</Filter>
     </ClCompile>
+    <ClCompile Include="StatBehaviour.cpp">
+      <Filter>Source Files\Behaviours</Filter>
+    </ClCompile>
+    <ClCompile Include="OutsideRangeCondition.cpp">
+      <Filter>Source Files\Conditions</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Agent.h">
@@ -169,6 +175,12 @@
     </ClInclude>
     <ClInclude Include="ThirstState.h">
       <Filter>Header Files\States</Filter>
+    </ClInclude>
+    <ClInclude Include="StatBehaviour.h">
+      <Filter>Header Files\Behaviours</Filter>
+    </ClInclude>
+    <ClInclude Include="OutsideRangeCondition.h">
+      <Filter>Header Files\Conditions</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

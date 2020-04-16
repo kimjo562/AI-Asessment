@@ -142,11 +142,13 @@
     <ClCompile Include="IdleState.cpp" />
     <ClCompile Include="KeyboardBehaviour.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="OutsideRangeCondition.cpp" />
     <ClCompile Include="PredAtkState.cpp" />
     <ClCompile Include="PreyEvadeState.cpp" />
     <ClCompile Include="PursueBehaviour.cpp" />
     <ClCompile Include="ScreenBehaviour.cpp" />
     <ClCompile Include="SeekBehaviour.cpp" />
+    <ClCompile Include="StatBehaviour.cpp" />
     <ClCompile Include="State.cpp" />
     <ClCompile Include="ThirstState.cpp" />
     <ClCompile Include="WanderBehaviour.cpp" />
@@ -166,11 +168,13 @@
     <ClInclude Include="HungerState.h" />
     <ClInclude Include="IdleState.h" />
     <ClInclude Include="KeyboardBehaviour.h" />
+    <ClInclude Include="OutsideRangeCondition.h" />
     <ClInclude Include="PredAtkState.h" />
     <ClInclude Include="PreyEvadeState.h" />
     <ClInclude Include="PursueBehaviour.h" />
     <ClInclude Include="ScreenBehaviour.h" />
     <ClInclude Include="SeekBehaviour.h" />
+    <ClInclude Include="StatBehaviour.h" />
     <ClInclude Include="State.h" />
     <ClInclude Include="ThirstState.h" />
     <ClInclude Include="Transition.h" />

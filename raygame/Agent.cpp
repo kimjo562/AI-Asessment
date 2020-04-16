@@ -29,3 +29,18 @@ void Agent::addForce(Vector2 force)
 {
 	m_velocity += force;
 }
+
+void Agent::addHealth(float health)
+{
+	m_health = health;
+}
+
+void Agent::addFood(float food)
+{
+	m_hunger = food;
+}
+
+void Agent::addWater(float water)
+{
+	m_thirst = water;
+}

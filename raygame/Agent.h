@@ -22,6 +22,10 @@ public:
 	//Add a force to the agent's velocity
 	void addForce(Vector2 force);
 
+	void addHealth(float health);
+	void addFood(float food);
+	void addWater(float water);
+
 	//Movement functions
 	void setPosition(Vector2 position) { m_position = position; }
 	Vector2 getPosition() { return m_position; }
@@ -36,6 +40,10 @@ public:
 	void setColor(Color color) { m_color = color; }
 	Color getColor() { return m_color; }
 
+	float getHealth() { return m_health; }
+	float getHunger() { return m_hunger; }
+	float getThirst() { return m_thirst; }
+
 protected:
 	std::vector<Behaviour*> m_behaviourList;
 
@@ -44,4 +52,8 @@ protected:
 
 	float m_speed = 200.0f;
 	Color m_color = VIOLET;
+
+	float m_health = 100.0f;
+	float m_hunger = 100.0f;
+	float m_thirst = 100.0f;
 };
