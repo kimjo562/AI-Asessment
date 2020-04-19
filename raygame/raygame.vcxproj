@@ -133,7 +133,6 @@
   <ItemGroup>
     <ClCompile Include="ABDecision.cpp" />
     <ClCompile Include="Agent.cpp" />
-    <ClCompile Include="AStar.cpp" />
     <ClCompile Include="BehaviourDecision.cpp" />
     <ClCompile Include="DecisionTreeBehaviour.cpp" />
     <ClCompile Include="EvadeBehaviour.cpp" />

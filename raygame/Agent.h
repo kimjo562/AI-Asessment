@@ -41,7 +41,11 @@ public:
 	Color getColor() { return m_color; }
 
 	float getHealth() { return m_health; }
+
+	float setHunger(float hunger) { return m_hunger = hunger; }
 	float getHunger() { return m_hunger; }
+
+	float setThirst(float thirst) { return m_thirst = thirst; }
 	float getThirst() { return m_thirst; }
 
 protected:

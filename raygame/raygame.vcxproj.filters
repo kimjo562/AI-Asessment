@@ -87,9 +87,6 @@
     <ClCompile Include="PursueBehaviour.cpp">
       <Filter>Source Files\Behaviours</Filter>
     </ClCompile>
-    <ClCompile Include="AStar.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="HungerState.cpp">
       <Filter>Source Files\States</Filter>
     </ClCompile>

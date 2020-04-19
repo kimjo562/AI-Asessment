@@ -19,10 +19,14 @@
 #include "hungerState.h"
 #include "thirstState.h"
 #include "WithinRangeCondition.h"
+#include "OutsideRangeCondition.h"
 #include "DecisionTreeBehaviour.h"
 #include "ABDecision.h"
 #include "BehaviourDecision.h"
 #include "StatBehaviour.h"
+#include "AStar.h"
+
+using namespace aStar;
 
 int main()
 {
@@ -38,7 +42,7 @@ int main()
 	// Create the player
 	Agent* player = new Agent();
 	player->setPosition(Vector2{ 630.0f, 650.0f });
-	player->setSpeed(120.0f);
+	player->setSpeed(110.0f);
 	player->setColor(WHITE);
 
 	// Create the enemy
@@ -101,6 +105,16 @@ int main()
 	enemyFSM->addTransition(toAttackTransition);
 	predIdleState->addTransition(toAttackTransition);
 
+	// Create and add the outside condition for enemy
+	Condition* outsideEnemyRangeCond = new OutsideRangeCondition(player, 120);
+	enemyFSM->addCondition(outsideEnemyRangeCond);
+	// Create and add the OutsideTrans for enemy
+	Transition* attackOutofRange = new Transition(predIdleState, outsideEnemyRangeCond);
+	enemyFSM->addTransition(attackOutofRange);
+	attackState->addTransition(attackOutofRange);
+
+
+
 	// Create and add the condition for player
 	Condition* withinPlayerRangeCond = new WithinRangeCondition(enemy, 110);		// (Target, Range Detection)
 	playerFSM->addCondition(withinPlayerRangeCond);
@@ -109,9 +123,18 @@ int main()
 	playerFSM->addTransition(toEvadeTransition);
 	preyIdleState->addTransition(toEvadeTransition);
 
+	// Create and add the outside condition for player
+	Condition* outsidePlayerRangeCond = new OutsideRangeCondition(enemy, 130);
+	playerFSM->addCondition(outsidePlayerRangeCond);
+	// Create and add the OutsideTrans for player
+	Transition* evadeOutofRange = new Transition(preyIdleState, outsidePlayerRangeCond);
+	playerFSM->addTransition(evadeOutofRange);
+	evadeState->addTransition(evadeOutofRange);
+
 	// Set current state to idle
 	playerFSM->setCurrentState(preyIdleState);
 	enemyFSM->setCurrentState(predIdleState);
+
 
 
 	//--------------------------------------------------------------------------------------
@@ -127,6 +150,51 @@ int main()
 		enemy->update(deltaTime);
 		foodSource->update(deltaTime);
 		waterSource->update(deltaTime);
+
+		if (player->getHunger() < 30)
+		{
+			// Create and add the condition for player
+			Condition* predLowHunger = new WithinRangeCondition(foodSource, 2000);		// (Target, Range Detection)
+			playerFSM->addCondition(predLowHunger);
+			// Create and add the Transition for player
+			Transition* toSearchFood = new Transition(hungerState, predLowHunger);
+			playerFSM->addTransition(toSearchFood);
+			preyIdleState->addTransition(toSearchFood);
+
+		}
+		else if (player->getHunger < 30)
+		{
+			// Create and add the outside condition for player
+			Condition* preyHungerNormal = new OutsideRangeCondition(foodSource, 2000);
+			playerFSM->addCondition(preyHungerNormal);
+			// Create and add the OutsideTrans for player
+			Transition* hungerSatiated = new Transition(preyIdleState, preyHungerNormal);
+			playerFSM->addTransition(hungerSatiated);
+			hungerState->addTransition(hungerSatiated);
+		}
+
+		if (player->getThirst() < 30)
+		{
+			// Create and add the condition for player
+			Condition* preyLowThirst = new WithinRangeCondition(waterSource, 2000);		// (Target, Range Detection)
+			playerFSM->addCondition(preyLowThirst);
+			// Create and add the Transition for player
+			Transition* toSearchWater = new Transition(thirstState, preyLowThirst);
+			playerFSM->addTransition(toSearchWater);
+			preyIdleState->addTransition(toSearchWater);
+
+			player->setThirst(200.0f);
+		}
+		else if(player->getThirst() > 30)
+		{
+			// Create and add the outside condition for player
+			Condition* preyThirstNormal = new OutsideRangeCondition(waterSource, 2000);
+			playerFSM->addCondition(preyThirstNormal);
+			// Create and add the OutsideTrans for player
+			Transition* thirstSatiated = new Transition(preyIdleState, preyThirstNormal);
+			playerFSM->addTransition(thirstSatiated);
+			thirstState->addTransition(thirstSatiated);
+		}
 
 		//----------------------------------------------------------------------------------
 
